@@ -11,6 +11,11 @@
     </parent>
     <packaging>maven-plugin</packaging>
     <name>Autogen code generator</name>
+    <scm>
+      <connection>scm:svn:http://svn.basistech.net/engineering/maven-support/maven-plugins/autogen/trunk/</connection>
+      <developerConnection>scm:svn:http://svn.basistech.net/engineering/maven-support/maven-plugins/autogen/trunk/</developerConnection>
+    </scm>
+
     <dependencies>
         <dependency>
             <groupId>org.apache.maven</groupId>
