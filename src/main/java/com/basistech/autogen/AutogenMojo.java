@@ -25,6 +25,9 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
 import org.python.core.PyCode;
+import org.python.core.PyList;
+import org.python.core.PyString;
+import org.python.core.PyStringMap;
 import org.python.core.PySystemState;
 import org.python.util.PythonInterpreter;
 
@@ -33,7 +36,6 @@ import org.python.util.PythonInterpreter;
  * @goal generate
  * @phase generate-sources
  */
-@SuppressWarnings("PMD")
 public class AutogenMojo extends AbstractMojo {
     private static final Charset UTF8 = Charset.forName("utf-8");
     /**
@@ -57,8 +59,11 @@ public class AutogenMojo extends AbstractMojo {
      * @required
      */
     private MavenProject project;
+    
+    private PySystemState pySystemState;
 
     public AutogenMojo() {
+        pySystemState = new PySystemState();
     }
 
     /** {@inheritDoc} */
@@ -96,8 +101,14 @@ public class AutogenMojo extends AbstractMojo {
     }
 
     private void runAutogen(String[] args) {
-        PythonInterpreter.initialize(PySystemState.getBaseProperties(), null, args);
-        PythonInterpreter pi = new PythonInterpreter();
+        PyList argv = new PyList();
+        if (args != null) {
+            for (String arg : args) {
+                argv.append(new PyString(arg));
+            }
+        }
+        pySystemState.argv = argv;
+        PythonInterpreter pi = new PythonInterpreter(new PyStringMap(), pySystemState);
         InputStreamReader genReader = new InputStreamReader(getClass().getResourceAsStream("/autogen.py"),
                                                             UTF8);
         PyCode autogenCode = pi.compile(genReader);
