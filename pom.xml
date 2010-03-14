@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.basistech.maven.plugins</groupId>
     <artifactId>autogen</artifactId>
-    <version>2-SNAPSHOT</version>
+    <version>2</version>
     <parent>
         <groupId>com.basistech</groupId>
         <artifactId>basis-parent</artifactId>
@@ -11,6 +11,11 @@
     </parent>
     <packaging>maven-plugin</packaging>
     <name>Autogen code generator</name>
+    <scm>
+      <connection>scm:svn:http://svn.basistech.net/engineering/maven-support/maven-plugins/autogen/tags/autogen-2</connection>
+      <developerConnection>scm:svn:http://svn.basistech.net/engineering/maven-support/maven-plugins/autogen/tags/autogen-2</developerConnection>
+    </scm>
+
     <dependencies>
         <dependency>
             <groupId>org.apache.maven</groupId>
