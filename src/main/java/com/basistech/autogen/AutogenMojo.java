@@ -59,6 +59,11 @@ public class AutogenMojo extends AbstractMojo {
      * @required
      */
     private MavenProject project;
+
+    /**
+     * @parameter expression="${autogen.language}" default-value="java"
+     */
+    private String language = "java";
     
     private PySystemState pySystemState;
 
@@ -83,15 +88,24 @@ public class AutogenMojo extends AbstractMojo {
             List<String> args = new ArrayList<String>();
             args.add("autogen.py");
             args.add("-t");
+            if (!template.getCode().exists()) {
+                throw new MojoExecutionException(String.format("Template %s does not exist.", template.getCode().getAbsolutePath()));
+            }
             args.add(template.getCode().getAbsolutePath());
             args.add("-o");
-            String dirTail = template.getPackageName().replaceAll("\\.", "/");
-            String outName = template.getCode().getName().replace(".java.tpl", ".java");
-            File of = new File(outputDirectory, dirTail);
-            if (!of.exists()) {
-                of.mkdirs();
+            File outputDir = outputDirectory;
+            if (template.getPackageName() != null) {
+                String dirTail = template.getPackageName().replaceAll("\\.", "/");
+                outputDir = new File(outputDir, dirTail);
             }
-            of = new File(of, outName);
+            if (!outputDir.exists()) {
+                outputDir.mkdirs();
+            }
+            String outName = template.getCode().getName().replace(String.format(".%1s.tpl", language),
+                    String.format(".%1$s", language));
+            File of = new File(outputDir, outName);
+
+
             args.add(of.getAbsolutePath());
             args.add(template.getData().getAbsolutePath());
             getLog().info("Running: " + args);
