@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.basistech.maven.plugins</groupId>
     <artifactId>autogen</artifactId>
-    <version>7</version>
+    <version>8-SNAPSHOT</version>
     <parent>
         <artifactId>open-source-parent</artifactId>
         <groupId>com.basistech</groupId>
@@ -15,7 +15,7 @@
       <url>https://github.com/basis-technology-corp/basis-autogen-maven-plugin</url>
       <connection>scm:git:git@github.com:basis-technology-corp/basis-autogen-maven-plugin.git</connection>
       <developerConnection>scm:git:git@github.com:basis-technology-corp/basis-autogen-maven-plugin.git</developerConnection>
-      <tag>autogen-7</tag>
+      <tag>HEAD</tag>
   </scm>
     <description>
       A simple template expander inspired by Scheme.
