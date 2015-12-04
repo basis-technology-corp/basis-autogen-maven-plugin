@@ -54,7 +54,7 @@ public class AutogenMojo extends AbstractMojo {
      * @parameter
      * @required
      */
-    private List templates;
+    private List<Template> templates;
 
     /**
      * @parameter expression="${project}"
@@ -85,8 +85,7 @@ public class AutogenMojo extends AbstractMojo {
             project.addCompileSourceRoot(outputDirectory.getAbsolutePath());
         }
 
-        for (Object tObject : templates) {
-            Template template = (Template) tObject;
+        for (Template template : templates) {
             List<String> args = new ArrayList<String>();
             args.add("autogen.py");
             args.add("-t");
@@ -111,12 +110,12 @@ public class AutogenMojo extends AbstractMojo {
             args.add(of.getAbsolutePath());
             args.add(template.getData().getAbsolutePath());
             getLog().info("Running: " + args);
-            runAutogen(args.toArray(new String[args.size()]));
+            runAutogen(pySystemState, args.toArray(new String[args.size()]));
         }
 
     }
 
-    private void runAutogen(String[] args) {
+    static void runAutogen(PySystemState pySystemState, String[] args) {
         PyList argv = new PyList();
         if (args != null) {
             for (String arg : args) {
@@ -125,7 +124,7 @@ public class AutogenMojo extends AbstractMojo {
         }
         pySystemState.argv = argv;
         PythonInterpreter pi = new PythonInterpreter(new PyStringMap(), pySystemState);
-        InputStreamReader genReader = new InputStreamReader(getClass().getResourceAsStream("/autogen.py"),
+        InputStreamReader genReader = new InputStreamReader(AutogenMojo.class.getResourceAsStream("/autogen.py"),
                                                             UTF8);
         PyCode autogenCode = pi.compile(genReader);
         pi.exec(autogenCode);
